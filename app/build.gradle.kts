@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    id("pricewatcher.android")
 }
 
 val backend = providers.gradleProperty("backend").getOrElse("local")
@@ -16,14 +17,9 @@ val apiBaseUrl = providers.gradleProperty("apiBaseUrl").getOrElse(
 
 android {
     namespace = "alexeyyuditsky.pricewatcher"
-    compileSdk {
-        version = release(37)
-    }
 
     defaultConfig {
         applicationId = "alexeyyuditsky.pricewatcher"
-        minSdk = 28
-        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
         buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
@@ -39,38 +35,24 @@ android {
             }
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
     buildFeatures {
-        compose = true
         buildConfig = true
     }
 }
 
 dependencies {
-    implementation(libs.hilt.android)
-    implementation(libs.androidx.hilt.lifecycle.viewmodel.compose)
-    ksp(libs.hilt.compiler)
-    implementation(platform(libs.androidx.compose.bom))
+    implementation(project(":feature:price"))
+    implementation(project(":feature:services"))
+    implementation(project(":core:common"))
+    implementation(project(":core:network"))
+    implementation(project(":core:products"))
+    implementation(project(":core:designsystem"))
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-    debugImplementation(libs.androidx.compose.ui.tooling)
 }

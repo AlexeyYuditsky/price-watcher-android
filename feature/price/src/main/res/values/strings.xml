@@ -1,0 +1,24 @@
+<resources>
+    <string name="price_title">Цена товара</string>
+    <string name="price_description">Вставьте полную или короткую ссылку на товар Ozon. Из текста с названием товара извлечём ссылку.</string>
+    <string name="paste_from_clipboard">Вставить из буфера</string>
+    <string name="error_clipboard_empty">Буфер обмена пуст или не содержит текста.</string>
+    <string name="error_clipboard_url">В буфере не найдена ссылка на товар Ozon.</string>
+    <string name="error_shared_url">В полученном тексте не найдена ссылка на товар Ozon.</string>
+    <string name="product_url">Ссылка на товар</string>
+    <string name="fetch_price">Получить цену</string>
+    <string name="fetching_price">Получаем цену…</string>
+    <string name="price_label">Цена</string>
+    <string name="fetched_at_label">Получено с сервера · время устройства</string>
+    <string name="no_price">—</string>
+    <string name="no_date">Отправьте ссылку, чтобы получить данные</string>
+    <string name="error_invalid_url">Вставьте HTTPS-ссылку ozon.ru/product/… или ozon.ru/t/…</string>
+    <string name="error_product_unavailable">Сервер не смог получить цену. Попробуйте ещё раз.</string>
+    <string name="error_server">Ошибка сервера. Повторите запрос позже.</string>
+    <string name="error_timeout">Сервер долго не отвечает. Повторите запрос.</string>
+    <string name="error_network">Не удалось подключиться. Проверьте интернет и доступность сервера.</string>
+    <string name="error_response">Не удалось прочитать ответ сервера.</string>
+    <string name="product_url_placeholder">https://www.ozon.ru/product/…</string>
+    <string name="shared_url_pending">Новая ссылка будет подставлена после завершения текущего запроса.</string>
+    <string name="back_to_services">← Сервисы</string>
+</resources>
