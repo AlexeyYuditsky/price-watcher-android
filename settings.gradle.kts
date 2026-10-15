@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google {
             content {
@@ -23,5 +24,13 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "price-watcher"
-include(":app")
+include(
+    ":app",
+    ":core:common",
+    ":core:network",
+    ":core:products",
+    ":core:designsystem",
+    ":feature:price",
+    ":feature:services"
+)
  
