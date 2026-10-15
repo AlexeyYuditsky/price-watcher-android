@@ -4,44 +4,30 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import alexeyyuditsky.pricewatcher.ui.price.PriceScreen
+import alexeyyuditsky.pricewatcher.ui.price.PriceViewModel
 import alexeyyuditsky.pricewatcher.ui.theme.PricewatcherTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             PricewatcherTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                val viewModel: PriceViewModel = hiltViewModel()
+                val state by viewModel.state.collectAsStateWithLifecycle()
+                PriceScreen(
+                    state = state,
+                    onUrlChanged = viewModel::onUrlChanged,
+                    onFetchPrice = viewModel::fetchPrice,
+                    onPasteFromClipboard = viewModel::pasteFromClipboard
+                )
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PricewatcherTheme {
-        Greeting("Android")
     }
 }
