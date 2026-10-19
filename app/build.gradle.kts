@@ -10,7 +10,7 @@ val backend = providers.gradleProperty("backend").getOrElse("local")
 val apiBaseUrl = providers.gradleProperty("apiBaseUrl").getOrElse(
     when (backend) {
         "local" -> "http://127.0.0.1:8080/"
-        "vps" -> "http://95.163.19.231:8080/"
+        "vps" -> "https://api.mypricewatcher.ru/"
         else -> error("Unknown backend '$backend'. Use local or vps.")
     }
 )
