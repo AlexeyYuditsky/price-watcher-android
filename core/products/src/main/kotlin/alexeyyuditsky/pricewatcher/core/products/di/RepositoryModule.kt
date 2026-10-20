@@ -1,7 +1,7 @@
 package alexeyyuditsky.pricewatcher.core.products.di
 
-import alexeyyuditsky.pricewatcher.core.products.data.PriceRepositoryImpl
-import alexeyyuditsky.pricewatcher.core.products.domain.PriceRepository
+import alexeyyuditsky.pricewatcher.core.products.data.TrackingRepositoryImpl
+import alexeyyuditsky.pricewatcher.core.products.domain.TrackingRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,5 +14,5 @@ internal abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindPriceRepository(implementation: PriceRepositoryImpl): PriceRepository
+    abstract fun bindTrackingRepository(implementation: TrackingRepositoryImpl): TrackingRepository
 }

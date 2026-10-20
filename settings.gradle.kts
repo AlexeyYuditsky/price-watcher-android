@@ -32,6 +32,6 @@ include(
     ":core:products",
     ":core:designsystem",
     ":feature:auth",
-    ":feature:price",
+    ":feature:tracking",
     ":feature:services"
 )

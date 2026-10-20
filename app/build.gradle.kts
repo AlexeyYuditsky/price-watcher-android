@@ -42,7 +42,7 @@ android {
 
 dependencies {
     implementation(project(":feature:auth"))
-    implementation(project(":feature:price"))
+    implementation(project(":feature:tracking"))
     implementation(project(":feature:services"))
     implementation(project(":core:auth"))
     implementation(project(":core:common"))

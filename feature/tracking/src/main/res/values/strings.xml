@@ -1,0 +1,34 @@
+<resources>
+    <string name="tracking_title">Отслеживание цен</string>
+    <string name="tracking_description">Вставьте ссылку на товар Ozon — цена будет проверяться каждые 30 минут.</string>
+    <string name="product_url">Ссылка на товар</string>
+    <string name="product_url_placeholder">https://www.ozon.ru/product/…</string>
+    <string name="paste_from_clipboard">Вставить из буфера</string>
+    <string name="add_product">Отслеживать</string>
+    <string name="adding_product">Добавляем…</string>
+    <string name="tracking_empty">Пока нет отслеживаемых товаров</string>
+    <string name="retry">Повторить</string>
+    <string name="back_to_services">← Сервисы</string>
+    <string name="back_to_tracking">← Мои товары</string>
+    <string name="remove_product">Удалить</string>
+    <string name="no_price">—</string>
+    <string name="no_title">Товар Ozon</string>
+    <string name="checked_at">Проверено: %1$s</string>
+    <string name="not_checked">Ещё не проверялся</string>
+    <string name="history_title">История цены</string>
+    <string name="history_empty">Проверок за последние 30 дней нет</string>
+    <string name="refresh_now">Обновить сейчас</string>
+    <string name="refreshing">Обновляем…</string>
+    <string name="period_checks">Проверок: %1$d</string>
+    <string name="error_invalid_url">Вставьте HTTPS-ссылку ozon.ru/product/… или ozon.ru/t/…</string>
+    <string name="error_clipboard_empty">Буфер обмена пуст или не содержит текста.</string>
+    <string name="error_clipboard_url">В буфере не найдена ссылка на товар Ozon.</string>
+    <string name="error_not_found">Товар не найден в отслеживании.</string>
+    <string name="error_product_unavailable">Сервер не смог получить цену. Попробуйте ещё раз.</string>
+    <string name="error_too_many_requests">Слишком много запросов. Подождите минуту и повторите.</string>
+    <string name="error_busy">Сервер сейчас занят другими запросами. Повторите через несколько секунд.</string>
+    <string name="error_server">Ошибка сервера. Повторите запрос позже.</string>
+    <string name="error_timeout">Сервер долго не отвечает. Повторите запрос.</string>
+    <string name="error_network">Не удалось подключиться. Проверьте интернет и доступность сервера.</string>
+    <string name="error_response">Не удалось прочитать ответ сервера.</string>
+</resources>

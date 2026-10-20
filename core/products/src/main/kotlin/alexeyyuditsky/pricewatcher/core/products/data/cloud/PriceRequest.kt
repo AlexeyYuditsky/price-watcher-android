@@ -1,7 +1,0 @@
-package alexeyyuditsky.pricewatcher.core.products.data.cloud
-
-import com.google.gson.annotations.SerializedName
-
-internal data class PriceRequest(
-    @field:SerializedName("url") val url: String
-)

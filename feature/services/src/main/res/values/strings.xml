@@ -1,11 +1,11 @@
 <resources>
     <string name="services_title">Сервисы</string>
-    <string name="services_description">Выберите сервис, чтобы проверить цену товара</string>
+    <string name="services_description">Выберите сервис, чтобы отслеживать цены товаров</string>
     <string name="service_ozon">Ozon</string>
     <string name="service_wildberries">Wildberries</string>
     <string name="service_yandex_market">Яндекс Маркет</string>
     <string name="service_aliexpress">AliExpress</string>
-    <string name="service_available">Проверить цену</string>
+    <string name="service_available">Отслеживать цены</string>
     <string name="service_coming_soon">Скоро</string>
     <string name="logout">Выйти из аккаунта</string>
 </resources>
