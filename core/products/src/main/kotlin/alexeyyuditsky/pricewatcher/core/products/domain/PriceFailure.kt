@@ -7,6 +7,12 @@ enum class PriceFailure : PriceResult {
     PRODUCT_UNAVAILABLE {
         override fun <T> map(mapper: PriceResultMapper<T>): T = mapper.mapProductUnavailable()
     },
+    TOO_MANY_REQUESTS {
+        override fun <T> map(mapper: PriceResultMapper<T>): T = mapper.mapTooManyRequests()
+    },
+    BUSY {
+        override fun <T> map(mapper: PriceResultMapper<T>): T = mapper.mapBusy()
+    },
     SERVER {
         override fun <T> map(mapper: PriceResultMapper<T>): T = mapper.mapServerError()
     },

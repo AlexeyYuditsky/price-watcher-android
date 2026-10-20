@@ -14,6 +14,8 @@
     <string name="no_date">Отправьте ссылку, чтобы получить данные</string>
     <string name="error_invalid_url">Вставьте HTTPS-ссылку ozon.ru/product/… или ozon.ru/t/…</string>
     <string name="error_product_unavailable">Сервер не смог получить цену. Попробуйте ещё раз.</string>
+    <string name="error_too_many_requests">Слишком много запросов. Подождите минуту и повторите.</string>
+    <string name="error_busy">Сервер сейчас занят другими запросами. Повторите через несколько секунд.</string>
     <string name="error_server">Ошибка сервера. Повторите запрос позже.</string>
     <string name="error_timeout">Сервер долго не отвечает. Повторите запрос.</string>
     <string name="error_network">Не удалось подключиться. Проверьте интернет и доступность сервера.</string>

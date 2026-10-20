@@ -7,4 +7,5 @@
     <string name="service_aliexpress">AliExpress</string>
     <string name="service_available">Проверить цену</string>
     <string name="service_coming_soon">Скоро</string>
+    <string name="logout">Выйти из аккаунта</string>
 </resources>

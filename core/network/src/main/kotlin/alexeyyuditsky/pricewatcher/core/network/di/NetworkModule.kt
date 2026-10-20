@@ -1,6 +1,9 @@
 package alexeyyuditsky.pricewatcher.core.network.di
 
+import alexeyyuditsky.pricewatcher.core.network.AuthInterceptor
 import alexeyyuditsky.pricewatcher.core.network.NetworkConfig
+import alexeyyuditsky.pricewatcher.core.network.PlainRetrofit
+import alexeyyuditsky.pricewatcher.core.network.TokenAuthenticator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +20,8 @@ internal object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideHttpClient(): OkHttpClient = OkHttpClient.Builder()
+    @PlainRetrofit
+    fun providePlainHttpClient(): OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(15, TimeUnit.SECONDS)
         .readTimeout(150, TimeUnit.SECONDS)
         .callTimeout(180, TimeUnit.SECONDS)
@@ -26,9 +30,32 @@ internal object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(config: NetworkConfig, client: OkHttpClient): Retrofit = Retrofit.Builder()
-        .baseUrl(config.baseUrl)
-        .client(client)
-        .addConverterFactory(GsonConverterFactory.create())
+    fun provideHttpClient(
+        @PlainRetrofit plainClient: OkHttpClient,
+        authInterceptor: AuthInterceptor,
+        tokenAuthenticator: TokenAuthenticator
+    ): OkHttpClient = plainClient.newBuilder()
+        .addInterceptor(authInterceptor)
+        .authenticator(tokenAuthenticator)
         .build()
+
+    @Provides
+    @Singleton
+    @PlainRetrofit
+    fun providePlainRetrofit(
+        config: NetworkConfig,
+        @PlainRetrofit client: OkHttpClient
+    ): Retrofit = createRetrofit(config, client)
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(config: NetworkConfig, client: OkHttpClient): Retrofit =
+        createRetrofit(config, client)
+
+    private fun createRetrofit(config: NetworkConfig, client: OkHttpClient): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(config.baseUrl)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 }

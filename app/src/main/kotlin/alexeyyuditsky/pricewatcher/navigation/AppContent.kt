@@ -1,6 +1,8 @@
 package alexeyyuditsky.pricewatcher.navigation
 
+import alexeyyuditsky.pricewatcher.core.auth.domain.AuthorizationStatus
 import alexeyyuditsky.pricewatcher.core.designsystem.theme.PricewatcherTheme
+import alexeyyuditsky.pricewatcher.feature.auth.AuthRoute
 import alexeyyuditsky.pricewatcher.feature.price.PriceRoute
 import alexeyyuditsky.pricewatcher.feature.services.ServicesScreen
 import androidx.activity.compose.BackHandler
@@ -13,7 +15,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-internal fun AppContent(sharedText: String?, onSharedTextConsumed: () -> Unit) {
+internal fun AppContent(
+    authorizationStatus: AuthorizationStatus,
+    sharedText: String?,
+    onSharedTextConsumed: () -> Unit,
+    onLogout: () -> Unit
+) {
+    when (authorizationStatus) {
+        AuthorizationStatus.CHECKING -> return
+        AuthorizationStatus.UNAUTHORIZED -> {
+            AuthRoute()
+            return
+        }
+        AuthorizationStatus.AUTHORIZED -> Unit
+    }
     var destination by rememberSaveable { mutableStateOf(AppDestination.SERVICES) }
     LaunchedEffect(sharedText) {
         if (sharedText != null) destination = AppDestination.OZON
@@ -23,7 +38,8 @@ internal fun AppContent(sharedText: String?, onSharedTextConsumed: () -> Unit) {
     }
     when (destination) {
         AppDestination.SERVICES -> ServicesScreen(
-            onOzonClick = { destination = AppDestination.OZON }
+            onOzonClick = { destination = AppDestination.OZON },
+            onLogout = onLogout
         )
         AppDestination.OZON -> PriceRoute(
             sharedText = sharedText,
@@ -37,6 +53,6 @@ internal fun AppContent(sharedText: String?, onSharedTextConsumed: () -> Unit) {
 @Composable
 private fun AppContentPreview() {
     PricewatcherTheme {
-        ServicesScreen(onOzonClick = {})
+        ServicesScreen(onOzonClick = {}, onLogout = {})
     }
 }

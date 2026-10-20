@@ -1,0 +1,22 @@
+<resources>
+    <string name="login_title">Вход</string>
+    <string name="register_title">Регистрация</string>
+    <string name="auth_description">Войдите, чтобы проверять цены товаров</string>
+    <string name="email">Email</string>
+    <string name="password">Пароль</string>
+    <string name="password_hint">Не короче 4 символов</string>
+    <string name="login_button">Войти</string>
+    <string name="register_button">Зарегистрироваться</string>
+    <string name="switch_to_register">Нет аккаунта? Зарегистрироваться</string>
+    <string name="switch_to_login">Уже есть аккаунт? Войти</string>
+    <string name="authorizing">Подождите…</string>
+    <string name="error_invalid_email">Введите корректный email.</string>
+    <string name="error_short_password">Пароль должен быть не короче 4 символов.</string>
+    <string name="error_invalid_credentials">Неверный email или пароль.</string>
+    <string name="error_email_in_use">Этот email уже зарегистрирован. Войдите в аккаунт.</string>
+    <string name="error_too_many_requests">Слишком много попыток. Подождите минуту и повторите.</string>
+    <string name="error_server">Ошибка сервера. Повторите позже.</string>
+    <string name="error_timeout">Сервер долго не отвечает. Повторите запрос.</string>
+    <string name="error_network">Не удалось подключиться. Проверьте интернет и доступность сервера.</string>
+    <string name="error_response">Не удалось прочитать ответ сервера.</string>
+</resources>

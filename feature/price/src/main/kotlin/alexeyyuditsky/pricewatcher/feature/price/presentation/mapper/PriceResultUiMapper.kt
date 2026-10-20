@@ -18,6 +18,10 @@ internal class PriceResultUiMapper @Inject constructor(
 
     override fun mapProductUnavailable(): PriceUiState = PriceError(R.string.error_product_unavailable)
 
+    override fun mapTooManyRequests(): PriceUiState = PriceError(R.string.error_too_many_requests)
+
+    override fun mapBusy(): PriceUiState = PriceError(R.string.error_busy)
+
     override fun mapServerError(): PriceUiState = PriceError(R.string.error_server)
 
     override fun mapTimeout(): PriceUiState = PriceError(R.string.error_timeout)

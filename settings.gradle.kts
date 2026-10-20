@@ -26,11 +26,12 @@ dependencyResolutionManagement {
 rootProject.name = "price-watcher"
 include(
     ":app",
+    ":core:auth",
     ":core:common",
     ":core:network",
     ":core:products",
     ":core:designsystem",
+    ":feature:auth",
     ":feature:price",
     ":feature:services"
 )
- 

@@ -8,6 +8,10 @@ interface PriceResultMapper<T> {
 
     fun mapProductUnavailable(): T
 
+    fun mapTooManyRequests(): T
+
+    fun mapBusy(): T
+
     fun mapServerError(): T
 
     fun mapTimeout(): T

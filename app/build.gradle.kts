@@ -41,14 +41,18 @@ android {
 }
 
 dependencies {
+    implementation(project(":feature:auth"))
     implementation(project(":feature:price"))
     implementation(project(":feature:services"))
+    implementation(project(":core:auth"))
     implementation(project(":core:common"))
     implementation(project(":core:network"))
     implementation(project(":core:products"))
     implementation(project(":core:designsystem"))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
