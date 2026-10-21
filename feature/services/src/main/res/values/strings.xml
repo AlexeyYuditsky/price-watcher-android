@@ -4,8 +4,11 @@
     <string name="service_ozon">Ozon</string>
     <string name="service_wildberries">Wildberries</string>
     <string name="service_yandex_market">Яндекс Маркет</string>
-    <string name="service_aliexpress">AliExpress</string>
     <string name="service_available">Отслеживать цены</string>
     <string name="service_coming_soon">Скоро</string>
     <string name="logout">Выйти из аккаунта</string>
+    <string name="logout_confirm_title">Выйти из аккаунта?</string>
+    <string name="logout_confirm_text">Чтобы снова отслеживать цены, нужно будет войти.</string>
+    <string name="logout_confirm">Выйти</string>
+    <string name="cancel">Отмена</string>
 </resources>

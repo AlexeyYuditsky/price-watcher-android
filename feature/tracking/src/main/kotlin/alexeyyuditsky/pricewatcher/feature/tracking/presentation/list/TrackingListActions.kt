@@ -8,7 +8,13 @@ internal interface TrackingListActions {
 
     fun addProduct()
 
-    fun removeProduct(productId: String)
+    fun requestRemoval(productId: String, title: String?)
+
+    fun confirmRemoval()
+
+    fun cancelRemoval()
+
+    fun highlightShown()
 
     fun reload()
 }

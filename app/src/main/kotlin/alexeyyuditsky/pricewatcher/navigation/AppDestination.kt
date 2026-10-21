@@ -1,7 +1,5 @@
 package alexeyyuditsky.pricewatcher.navigation
 
-internal enum class AppDestination {
-    SERVICES,
-    TRACKING,
-    HISTORY
-}
+import java.io.Serializable
+
+internal sealed interface AppDestination : Serializable

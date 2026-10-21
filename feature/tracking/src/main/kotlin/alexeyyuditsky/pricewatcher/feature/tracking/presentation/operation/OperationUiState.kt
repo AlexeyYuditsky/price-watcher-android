@@ -11,4 +11,6 @@ internal sealed interface OperationUiState : Serializable {
     fun allowsInput(): Boolean = true
 
     fun reloadsData(): Boolean = false
+
+    fun savedProductId(): String? = null
 }

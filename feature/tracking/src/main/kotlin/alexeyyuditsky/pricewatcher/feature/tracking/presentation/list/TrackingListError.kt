@@ -20,7 +20,8 @@ internal data class TrackingListError(
     override fun show(
         scope: LazyListScope,
         actions: TrackingListActions,
-        onOpenProduct: (productId: String, title: String?) -> Unit
+        highlightedProductId: String?,
+        onOpenProduct: (productId: String, title: String?, url: String) -> Unit
     ) {
         scope.item(key = "error") {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {

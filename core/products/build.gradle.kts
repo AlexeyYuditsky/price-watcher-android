@@ -2,7 +2,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
-    id("pricewatcher.android")
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.pricewatcher.android)
 }
 
 android {
@@ -12,5 +13,5 @@ android {
 dependencies {
     implementation(project(":core:network"))
     implementation(libs.retrofit)
-    implementation(libs.gson)
+    implementation(libs.kotlinx.serialization.json)
 }

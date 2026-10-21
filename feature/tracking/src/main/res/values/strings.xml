@@ -11,6 +11,10 @@
     <string name="back_to_services">← Сервисы</string>
     <string name="back_to_tracking">← Мои товары</string>
     <string name="remove_product">Удалить</string>
+    <string name="remove_confirm_title">Удалить товар?</string>
+    <string name="remove_confirm_text">«%1$s» больше не будет отслеживаться, история цен будет недоступна.</string>
+    <string name="cancel">Отмена</string>
+    <string name="open_in_ozon">Открыть в Ozon</string>
     <string name="no_price">—</string>
     <string name="no_title">Товар Ozon</string>
     <string name="checked_at">Проверено: %1$s</string>
@@ -31,4 +35,5 @@
     <string name="error_timeout">Сервер долго не отвечает. Повторите запрос.</string>
     <string name="error_network">Не удалось подключиться. Проверьте интернет и доступность сервера.</string>
     <string name="error_response">Не удалось прочитать ответ сервера.</string>
+    <string name="error_open_ozon">Не найдено приложение, чтобы открыть Ozon.</string>
 </resources>

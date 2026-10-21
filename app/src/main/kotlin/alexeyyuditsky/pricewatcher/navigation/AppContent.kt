@@ -6,14 +6,18 @@ import alexeyyuditsky.pricewatcher.feature.auth.AuthRoute
 import alexeyyuditsky.pricewatcher.feature.services.ServicesScreen
 import alexeyyuditsky.pricewatcher.feature.tracking.HistoryRoute
 import alexeyyuditsky.pricewatcher.feature.tracking.TrackingRoute
-import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+import androidx.navigation3.ui.NavDisplay
 
 @Composable
 internal fun AppContent(
@@ -30,41 +34,61 @@ internal fun AppContent(
         }
         AuthorizationStatus.AUTHORIZED -> Unit
     }
-    var destination by rememberSaveable { mutableStateOf(AppDestination.SERVICES) }
-    var historyProductId by rememberSaveable { mutableStateOf("") }
-    var historyTitle by rememberSaveable { mutableStateOf<String?>(null) }
-    LaunchedEffect(sharedText) {
-        if (sharedText != null) destination = AppDestination.TRACKING
+    val backStack = rememberSaveable(saver = BackStackSaver) {
+        mutableStateListOf<AppDestination>(ServicesDestination)
     }
-    BackHandler(enabled = destination != AppDestination.SERVICES) {
-        destination = if (destination == AppDestination.HISTORY) {
-            AppDestination.TRACKING
+    val goBack = {
+        if (backStack.size > 1) backStack.removeAt(backStack.lastIndex)
+    }
+    LaunchedEffect(sharedText) {
+        if (sharedText == null) return@LaunchedEffect
+        if (TrackingDestination in backStack) {
+            while (backStack.last() != TrackingDestination) backStack.removeAt(backStack.lastIndex)
         } else {
-            AppDestination.SERVICES
+            backStack.add(TrackingDestination)
         }
     }
-    when (destination) {
-        AppDestination.SERVICES -> ServicesScreen(
-            onOzonClick = { destination = AppDestination.TRACKING },
-            onLogout = onLogout
-        )
-        AppDestination.TRACKING -> TrackingRoute(
-            sharedText = sharedText,
-            onSharedTextConsumed = onSharedTextConsumed,
-            onBack = { destination = AppDestination.SERVICES },
-            onOpenProduct = { productId, title ->
-                historyProductId = productId
-                historyTitle = title
-                destination = AppDestination.HISTORY
+    // Each entry gets its own ViewModelStore, so leaving a screen with Back cancels its work.
+    NavDisplay(
+        backStack = backStack,
+        onBack = goBack,
+        entryDecorators = listOf(
+            rememberSaveableStateHolderNavEntryDecorator(),
+            rememberViewModelStoreNavEntryDecorator()
+        ),
+        entryProvider = entryProvider {
+            entry<ServicesDestination> {
+                ServicesScreen(
+                    onOzonClick = { backStack.add(TrackingDestination) },
+                    onLogout = onLogout
+                )
             }
-        )
-        AppDestination.HISTORY -> HistoryRoute(
-            productId = historyProductId,
-            title = historyTitle,
-            onBack = { destination = AppDestination.TRACKING }
-        )
-    }
+            entry<TrackingDestination> {
+                TrackingRoute(
+                    sharedText = sharedText,
+                    onSharedTextConsumed = onSharedTextConsumed,
+                    onBack = goBack,
+                    onOpenProduct = { productId, title, url ->
+                        backStack.add(HistoryDestination(productId, title, url))
+                    }
+                )
+            }
+            entry<HistoryDestination> { destination ->
+                HistoryRoute(
+                    productId = destination.productId,
+                    title = destination.title,
+                    url = destination.url,
+                    onBack = goBack
+                )
+            }
+        }
+    )
 }
+
+private val BackStackSaver = listSaver<SnapshotStateList<AppDestination>, AppDestination>(
+    save = { it.toList() },
+    restore = { it.toMutableStateList() }
+)
 
 @Preview(name = "Главный экран приложения", showBackground = true)
 @Composable

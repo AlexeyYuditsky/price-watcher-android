@@ -1,36 +1,45 @@
 package alexeyyuditsky.pricewatcher.feature.services
 
 import alexeyyuditsky.pricewatcher.core.designsystem.theme.PricewatcherTheme
+import alexeyyuditsky.pricewatcher.feature.services.presentation.LogoutConfirmationDialog
 import alexeyyuditsky.pricewatcher.feature.services.presentation.ServiceCard
 import alexeyyuditsky.pricewatcher.feature.services.presentation.ServiceUi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 private val services = listOf(
-    ServiceUi(R.string.service_ozon, "OZ", Color(0xFF005BFF), true),
-    ServiceUi(R.string.service_wildberries, "WB", Color(0xFF9B20CF), false),
-    ServiceUi(R.string.service_yandex_market, "Я", Color(0xFFD49B00), false),
-    ServiceUi(R.string.service_aliexpress, "Ali", Color(0xFFE83C28), false)
+    ServiceUi(R.string.service_ozon, R.drawable.ic_service_ozon, "ozon", true),
+    ServiceUi(R.string.service_wildberries, R.drawable.ic_service_wildberries, "wildberries", false),
+    ServiceUi(R.string.service_yandex_market, R.drawable.ic_service_yandex_market, "yandex_market", false)
 )
 
 @Composable
 fun ServicesScreen(onOzonClick: () -> Unit, onLogout: () -> Unit) {
+    // The screen has no ViewModel; the dialog flag is UI-only and survives rotation.
+    var confirmLogout by rememberSaveable { mutableStateOf(false) }
     Scaffold { innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -41,10 +50,25 @@ fun ServicesScreen(onOzonClick: () -> Unit, onLogout: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item {
-                Text(
-                    text = stringResource(R.string.services_title),
-                    style = MaterialTheme.typography.headlineLarge
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(R.string.services_title),
+                        style = MaterialTheme.typography.headlineLarge,
+                        modifier = Modifier.weight(1f)
+                    )
+                    IconButton(
+                        onClick = { confirmLogout = true },
+                        modifier = Modifier.testTag("logout")
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_logout),
+                            contentDescription = stringResource(R.string.logout)
+                        )
+                    }
+                }
             }
             item {
                 Text(
@@ -53,20 +77,19 @@ fun ServicesScreen(onOzonClick: () -> Unit, onLogout: () -> Unit) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            items(items = services, key = { it.name }) { service ->
+            items(items = services, key = { it.tag }) { service ->
                 ServiceCard(service = service, onClick = onOzonClick)
             }
-            item {
-                TextButton(
-                    onClick = onLogout,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("logout")
-                ) {
-                    Text(text = stringResource(R.string.logout))
-                }
-            }
         }
+    }
+    if (confirmLogout) {
+        LogoutConfirmationDialog(
+            onConfirm = {
+                confirmLogout = false
+                onLogout()
+            },
+            onDismiss = { confirmLogout = false }
+        )
     }
 }
 

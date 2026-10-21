@@ -15,7 +15,8 @@ internal data class TrackingListContent(
     override fun show(
         scope: LazyListScope,
         actions: TrackingListActions,
-        onOpenProduct: (productId: String, title: String?) -> Unit
+        highlightedProductId: String?,
+        onOpenProduct: (productId: String, title: String?, url: String) -> Unit
     ) {
         if (products.isEmpty()) {
             scope.item(key = "empty") {
@@ -30,8 +31,10 @@ internal data class TrackingListContent(
         scope.items(items = products, key = { it.id }) { product ->
             TrackedProductCard(
                 product = product,
-                onOpen = { onOpenProduct(product.id, product.title) },
-                onRemove = { actions.removeProduct(product.id) }
+                highlighted = product.id == highlightedProductId,
+                onOpen = { onOpenProduct(product.id, product.title, product.url) },
+                onRemove = { actions.requestRemoval(product.id, product.title) },
+                onHighlightShown = actions::highlightShown
             )
         }
     }

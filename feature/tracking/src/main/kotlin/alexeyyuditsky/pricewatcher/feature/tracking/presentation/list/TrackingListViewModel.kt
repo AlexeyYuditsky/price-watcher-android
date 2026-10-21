@@ -35,10 +35,14 @@ internal class TrackingListViewModel @Inject constructor(
     val operation: StateFlow<OperationUiState> =
         savedStateHandle.getStateFlow(OPERATION_KEY, OperationIdle)
     val url: StateFlow<String> = savedStateHandle.getStateFlow(URL_KEY, "")
+    val removal: StateFlow<RemovalUiState> =
+        savedStateHandle.getStateFlow(REMOVAL_KEY, RemovalHidden)
+    val highlightedProductId: StateFlow<String?> =
+        savedStateHandle.getStateFlow(HIGHLIGHT_KEY, null)
 
+    // The list is loaded by the screen each time it becomes visible, see TrackingRoute.
     init {
         if (!operation.value.allowsInput()) updateOperation(OperationIdle)
-        reload()
     }
 
     override fun changeUrl(url: String) {
@@ -70,11 +74,29 @@ internal class TrackingListViewModel @Inject constructor(
     override fun addProduct() {
         val input = url.value
         if (input.isBlank()) return
-        runOperation(clearsUrl = true) { trackProduct(input) }
+        runOperation(addsProduct = true) { trackProduct(input) }
     }
 
-    override fun removeProduct(productId: String) {
-        runOperation(clearsUrl = false) { removeProduct.invoke(productId) }
+    override fun requestRemoval(productId: String, title: String?) {
+        if (!operation.value.allowsInput()) return
+        savedStateHandle[REMOVAL_KEY] = RemovalConfirmation(productId, title)
+    }
+
+    override fun confirmRemoval() {
+        if (!operation.value.allowsInput()) return
+        val request = removal.value
+        savedStateHandle[REMOVAL_KEY] = RemovalHidden
+        request.confirm { productId ->
+            runOperation(addsProduct = false) { removeProduct(productId) }
+        }
+    }
+
+    override fun cancelRemoval() {
+        savedStateHandle[REMOVAL_KEY] = RemovalHidden
+    }
+
+    override fun highlightShown() {
+        savedStateHandle[HIGHLIGHT_KEY] = null
     }
 
     override fun reload() {
@@ -86,7 +108,7 @@ internal class TrackingListViewModel @Inject constructor(
         }
     }
 
-    private fun runOperation(clearsUrl: Boolean, request: suspend () -> TrackingResult) {
+    private fun runOperation(addsProduct: Boolean, request: suspend () -> TrackingResult) {
         if (!operation.value.allowsInput()) return
         updateOperation(OperationRunning)
         runAsync.runAsync(
@@ -95,7 +117,10 @@ internal class TrackingListViewModel @Inject constructor(
         ) { result ->
             val next = result.getOrElse { operationMapper.mapInvalidResponse() }
             if (next.reloadsData()) {
-                if (clearsUrl) savedStateHandle[URL_KEY] = ""
+                if (addsProduct) {
+                    savedStateHandle[URL_KEY] = ""
+                    savedStateHandle[HIGHLIGHT_KEY] = next.savedProductId()
+                }
                 reload()
             }
             updateOperation(next)
@@ -110,5 +135,7 @@ internal class TrackingListViewModel @Inject constructor(
         private const val STATE_KEY = "tracking_list_state"
         private const val OPERATION_KEY = "tracking_list_operation"
         private const val URL_KEY = "tracking_url"
+        private const val REMOVAL_KEY = "tracking_removal"
+        private const val HIGHLIGHT_KEY = "tracking_highlight"
     }
 }

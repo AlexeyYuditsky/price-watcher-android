@@ -1,8 +1,10 @@
 package alexeyyuditsky.pricewatcher.core.auth.data.cloud
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 internal data class CredentialsRequest(
-    @field:SerializedName("email") val email: String,
-    @field:SerializedName("password") val password: String
+    @SerialName("email") val email: String,
+    @SerialName("password") val password: String
 )

@@ -1,7 +1,9 @@
 package alexeyyuditsky.pricewatcher.core.products.data.cloud
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 internal data class ProductsResponse(
-    @field:SerializedName("products") val products: List<TrackedProductResponse>? = null
+    @SerialName("products") val products: List<TrackedProductResponse>? = null
 )

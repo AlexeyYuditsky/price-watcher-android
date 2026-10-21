@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
-    id("pricewatcher.android")
+    alias(libs.plugins.pricewatcher.android)
 }
 
 android {

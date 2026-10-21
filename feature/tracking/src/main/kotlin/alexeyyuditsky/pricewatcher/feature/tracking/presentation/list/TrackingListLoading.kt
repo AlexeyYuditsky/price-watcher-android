@@ -15,7 +15,8 @@ internal data object TrackingListLoading : TrackingListUiState {
     override fun show(
         scope: LazyListScope,
         actions: TrackingListActions,
-        onOpenProduct: (productId: String, title: String?) -> Unit
+        highlightedProductId: String?,
+        onOpenProduct: (productId: String, title: String?, url: String) -> Unit
     ) {
         scope.item(key = "loading") {
             Box(

@@ -1,11 +1,13 @@
 package alexeyyuditsky.pricewatcher.core.products.data.cloud
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 internal data class TrackedProductResponse(
-    @field:SerializedName("id") val id: String? = null,
-    @field:SerializedName("url") val url: String? = null,
-    @field:SerializedName("title") val title: String? = null,
-    @field:SerializedName("imageUrl") val imageUrl: String? = null,
-    @field:SerializedName("latestPrice") val latestPrice: PricePointResponse? = null
+    @SerialName("id") val id: String? = null,
+    @SerialName("url") val url: String? = null,
+    @SerialName("title") val title: String? = null,
+    @SerialName("imageUrl") val imageUrl: String? = null,
+    @SerialName("latestPrice") val latestPrice: PricePointResponse? = null
 )

@@ -8,7 +8,7 @@ import javax.inject.Inject
 internal class OperationResultUiMapper @Inject constructor() :
     TrackingFailureUiMapper<OperationUiState>(::OperationFailed) {
 
-    override fun mapProduct(product: TrackedProduct): OperationUiState = OperationDone
+    override fun mapProduct(product: TrackedProduct): OperationUiState = OperationSaved(product.id)
 
     override fun mapRemoved(): OperationUiState = OperationDone
 

@@ -17,6 +17,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 fun HistoryRoute(
     productId: String,
     title: String?,
+    url: String,
     onBack: () -> Unit
 ) {
     val viewModel: HistoryViewModel = hiltViewModel()
@@ -27,6 +28,7 @@ fun HistoryRoute(
     }
     HistoryScreen(
         title = title,
+        url = url,
         state = state,
         operation = operation,
         actions = viewModel,
@@ -40,6 +42,7 @@ private fun HistoryRoutePreview() {
     PricewatcherTheme {
         HistoryScreen(
             title = "Рюкзак городской",
+            url = "https://www.ozon.ru/product/5677075076/",
             state = HistoryContent(emptyList()),
             operation = OperationIdle,
             actions = HistoryPreviewActions,

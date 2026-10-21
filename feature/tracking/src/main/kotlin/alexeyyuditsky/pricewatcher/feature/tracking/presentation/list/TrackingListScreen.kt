@@ -9,10 +9,13 @@ import alexeyyuditsky.pricewatcher.feature.tracking.presentation.operation.Opera
 import alexeyyuditsky.pricewatcher.feature.tracking.presentation.operation.OperationUiState
 import android.content.ClipboardManager
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -32,6 +35,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -39,10 +43,12 @@ import androidx.compose.ui.unit.dp
 internal fun TrackingListScreen(
     state: TrackingListUiState,
     operation: OperationUiState,
+    removal: RemovalUiState,
     url: String,
+    highlightedProductId: String?,
     actions: TrackingListActions,
     onBack: () -> Unit,
-    onOpenProduct: (productId: String, title: String?) -> Unit
+    onOpenProduct: (productId: String, title: String?, url: String) -> Unit
 ) {
     val keyboard = LocalSoftwareKeyboardController.current
     val context = LocalContext.current
@@ -87,7 +93,11 @@ internal fun TrackingListScreen(
                 )
             }
             item(key = "buttons") {
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                // Both buttons take the height of the taller one when a label wraps.
+                Row(
+                    modifier = Modifier.height(IntrinsicSize.Min),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
                     OutlinedButton(
                         onClick = {
                             val text = runCatching {
@@ -102,9 +112,13 @@ internal fun TrackingListScreen(
                         enabled = operation.allowsInput(),
                         modifier = Modifier
                             .weight(1f)
+                            .fillMaxHeight()
                             .testTag("pasteProductUrl")
                     ) {
-                        Text(text = stringResource(R.string.paste_from_clipboard))
+                        Text(
+                            text = stringResource(R.string.paste_from_clipboard),
+                            textAlign = TextAlign.Center
+                        )
                     }
                     Button(
                         onClick = {
@@ -114,12 +128,14 @@ internal fun TrackingListScreen(
                         enabled = url.isNotBlank() && operation.allowsInput(),
                         modifier = Modifier
                             .weight(1f)
+                            .fillMaxHeight()
                             .testTag("addProduct")
                     ) {
                         Text(
                             text = stringResource(
                                 if (operation.allowsInput()) R.string.add_product else R.string.adding_product
-                            )
+                            ),
+                            textAlign = TextAlign.Center
                         )
                     }
                 }
@@ -127,8 +143,9 @@ internal fun TrackingListScreen(
             item(key = "operation") {
                 operation.Show()
             }
-            state.show(this, actions, onOpenProduct)
+            state.show(this, actions, highlightedProductId, onOpenProduct)
         }
+        removal.Show(actions)
     }
 }
 
@@ -139,15 +156,31 @@ private fun TrackingListScreenPreview() {
         TrackingListScreen(
             state = TrackingListContent(
                 listOf(
-                    TrackedProductUi("1", "Рюкзак городской", null, "353,00 ₽", "20 окт., 16:30"),
-                    TrackedProductUi("2", "Смартфон OnePlus 16", null, "54 990,00 ₽", "20 окт., 16:00")
+                    TrackedProductUi(
+                        id = "1",
+                        url = "https://www.ozon.ru/product/5677075076/",
+                        title = "Рюкзак городской",
+                        imageUrl = null,
+                        price = "353,00 ₽",
+                        checkedAt = "20 окт., 16:30"
+                    ),
+                    TrackedProductUi(
+                        id = "2",
+                        url = "https://www.ozon.ru/product/3536803805/",
+                        title = "Смартфон OnePlus 16",
+                        imageUrl = null,
+                        price = "54 990,00 ₽",
+                        checkedAt = "20 окт., 16:00"
+                    )
                 )
             ),
             operation = OperationIdle,
+            removal = RemovalHidden,
             url = "",
+            highlightedProductId = null,
             actions = TrackingListPreviewActions,
             onBack = {},
-            onOpenProduct = { _, _ -> }
+            onOpenProduct = { _, _, _ -> }
         )
     }
 }
@@ -159,10 +192,12 @@ private fun TrackingListScreenEmptyPreview() {
         TrackingListScreen(
             state = TrackingListContent(emptyList()),
             operation = OperationIdle,
+            removal = RemovalHidden,
             url = "",
+            highlightedProductId = null,
             actions = TrackingListPreviewActions,
             onBack = {},
-            onOpenProduct = { _, _ -> }
+            onOpenProduct = { _, _, _ -> }
         )
     }
 }
@@ -174,10 +209,12 @@ private fun TrackingListScreenAddingPreview() {
         TrackingListScreen(
             state = TrackingListLoading,
             operation = OperationRunning,
+            removal = RemovalHidden,
             url = "https://ozon.ru/t/WckUwaa",
+            highlightedProductId = null,
             actions = TrackingListPreviewActions,
             onBack = {},
-            onOpenProduct = { _, _ -> }
+            onOpenProduct = { _, _, _ -> }
         )
     }
 }
@@ -189,10 +226,29 @@ private fun TrackingListScreenErrorPreview() {
         TrackingListScreen(
             state = TrackingListError(R.string.error_network),
             operation = OperationFailed(R.string.error_invalid_url),
+            removal = RemovalHidden,
             url = "https://example.com",
+            highlightedProductId = null,
             actions = TrackingListPreviewActions,
             onBack = {},
-            onOpenProduct = { _, _ -> }
+            onOpenProduct = { _, _, _ -> }
+        )
+    }
+}
+
+@Preview(name = "Подтверждение удаления на экране", showBackground = true)
+@Composable
+private fun TrackingListScreenRemovalPreview() {
+    PricewatcherTheme {
+        TrackingListScreen(
+            state = TrackingListContent(emptyList()),
+            operation = OperationIdle,
+            removal = RemovalConfirmation(productId = "1", title = "Рюкзак городской"),
+            url = "",
+            highlightedProductId = null,
+            actions = TrackingListPreviewActions,
+            onBack = {},
+            onOpenProduct = { _, _, _ -> }
         )
     }
 }

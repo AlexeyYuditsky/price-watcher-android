@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.compose)
-    id("pricewatcher.android")
+    alias(libs.plugins.pricewatcher.android)
 }
 
 android {

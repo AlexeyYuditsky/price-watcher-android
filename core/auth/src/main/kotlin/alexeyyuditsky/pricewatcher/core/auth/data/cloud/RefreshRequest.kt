@@ -1,7 +1,9 @@
 package alexeyyuditsky.pricewatcher.core.auth.data.cloud
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 internal data class RefreshRequest(
-    @field:SerializedName("refreshToken") val refreshToken: String
+    @SerialName("refreshToken") val refreshToken: String
 )

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Themed icons are single-colour: the percent sign and the tag hole are cut out of the tag. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group
+        android:pivotX="54"
+        android:pivotY="54"
+        android:scaleX="0.74"
+        android:scaleY="0.74"
+        android:translateX="-2.545"
+        android:translateY="-1.48">
+        <path
+            android:fillColor="@android:color/black"
+            android:fillType="evenOdd"
+            android:pathData="M25.77,53.99L43.77,33.99A3,3 0,0 1,46 33L78,33A3,3 0,0 1,81 36L81,76A3,3 0,0 1,78 79L46,79A3,3 0,0 1,43.77 78.01L25.77,58.01A3,3 0,0 1,25.77 53.99ZM36,56a4,4 0,1 0,8 0a4,4 0,1 0,-8 0ZM52.6,49a3.4,3.4 0,1 0,6.8 0a3.4,3.4 0,1 0,-6.8 0ZM64.6,63a3.4,3.4 0,1 0,6.8 0a3.4,3.4 0,1 0,-6.8 0ZM70.34,48.04L56.34,66.04A1.7,1.7 0,0 1,53.66 63.96L67.66,45.96A1.7,1.7 0,0 1,70.34 48.04Z" />
+    </group>
+</vector>

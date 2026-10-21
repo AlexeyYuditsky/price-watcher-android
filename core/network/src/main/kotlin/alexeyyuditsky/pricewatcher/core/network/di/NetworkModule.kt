@@ -10,9 +10,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -52,10 +54,13 @@ internal object NetworkModule {
     fun provideRetrofit(config: NetworkConfig, client: OkHttpClient): Retrofit =
         createRetrofit(config, client)
 
+    // The backend may add response fields; unknown keys must not break older app versions.
+    private val json = Json { ignoreUnknownKeys = true }
+
     private fun createRetrofit(config: NetworkConfig, client: OkHttpClient): Retrofit =
         Retrofit.Builder()
             .baseUrl(config.baseUrl)
             .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
 }

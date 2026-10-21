@@ -2,6 +2,7 @@ package alexeyyuditsky.pricewatcher.feature.tracking.presentation.mapper
 
 import alexeyyuditsky.pricewatcher.core.products.domain.PricePeriod
 import alexeyyuditsky.pricewatcher.core.products.domain.TrackedProduct
+import alexeyyuditsky.pricewatcher.core.products.domain.resizeOzonImageUrl
 import alexeyyuditsky.pricewatcher.feature.tracking.presentation.PricePeriodUi
 import alexeyyuditsky.pricewatcher.feature.tracking.presentation.TrackedProductUi
 import java.math.BigDecimal
@@ -20,8 +21,9 @@ internal class TrackingUiFormatter(
 
     fun product(product: TrackedProduct): TrackedProductUi = TrackedProductUi(
         id = product.id,
+        url = product.url,
         title = product.title,
-        imageUrl = product.imageUrl,
+        imageUrl = product.imageUrl?.let { resizeOzonImageUrl(it, IMAGE_SIZE) },
         price = product.latestPrice?.let { price(it.amount, it.currency) },
         checkedAt = product.latestPrice?.let { dateTime.format(it.checkedAt) }
     )
@@ -42,4 +44,9 @@ internal class TrackingUiFormatter(
         NumberFormat.getCurrencyInstance(locale).apply {
             this.currency = Currency.getInstance(currency)
         }.format(amount)
+
+    private companion object {
+        // Enough for a 112 dp image on xxxhdpi screens while staying much lighter than the original.
+        const val IMAGE_SIZE = 500
+    }
 }
