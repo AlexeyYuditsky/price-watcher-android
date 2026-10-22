@@ -38,4 +38,7 @@ internal data class TrackingListContent(
             )
         }
     }
+
+    override fun productPosition(productId: String): Int? =
+        products.indexOfFirst { it.id == productId }.takeIf { it >= 0 }
 }

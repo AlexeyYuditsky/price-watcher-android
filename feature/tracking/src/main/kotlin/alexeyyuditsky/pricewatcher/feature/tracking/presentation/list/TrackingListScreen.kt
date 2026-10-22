@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +29,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -52,8 +54,17 @@ internal fun TrackingListScreen(
 ) {
     val keyboard = LocalSoftwareKeyboardController.current
     val context = LocalContext.current
+    val listState = rememberLazyListState()
+    // A just added product is scrolled into view, otherwise its highlight runs off screen.
+    LaunchedEffect(highlightedProductId, state) {
+        val productId = highlightedProductId ?: return@LaunchedEffect
+        val position = state.productPosition(productId) ?: return@LaunchedEffect
+        val visible = listState.layoutInfo.visibleItemsInfo.any { it.key == productId }
+        if (!visible) listState.animateScrollToItem(ITEMS_BEFORE_PRODUCTS + position)
+    }
     Scaffold { innerPadding ->
         LazyColumn(
+            state = listState,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
@@ -148,6 +159,9 @@ internal fun TrackingListScreen(
         removal.Show(actions)
     }
 }
+
+// Header, input, buttons and operation items precede the products in the list.
+private const val ITEMS_BEFORE_PRODUCTS = 4
 
 @Preview(name = "Список отслеживания", showBackground = true)
 @Composable

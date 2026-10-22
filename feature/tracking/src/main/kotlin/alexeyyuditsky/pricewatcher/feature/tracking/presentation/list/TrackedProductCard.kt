@@ -6,6 +6,7 @@ import alexeyyuditsky.pricewatcher.feature.tracking.presentation.TrackedProductU
 import alexeyyuditsky.pricewatcher.feature.tracking.presentation.openInOzon
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -46,14 +47,13 @@ internal fun TrackedProductCard(
 ) {
     val context = LocalContext.current
     val highlight = remember { Animatable(0f) }
-    // A just added product flashes once, then the highlight is reported as shown.
+    // A just added product blinks a few times, then the highlight is reported as shown.
     LaunchedEffect(highlighted) {
         if (!highlighted) return@LaunchedEffect
-        highlight.snapTo(1f)
-        highlight.animateTo(
-            targetValue = 0f,
-            animationSpec = tween(durationMillis = 1200, delayMillis = 600)
-        )
+        repeat(HIGHLIGHT_BLINKS) {
+            highlight.animateTo(targetValue = 1f, animationSpec = tween(durationMillis = 250))
+            highlight.animateTo(targetValue = 0f, animationSpec = tween(durationMillis = 450))
+        }
         onHighlightShown()
     }
     Card(
@@ -64,6 +64,10 @@ internal fun TrackedProductCard(
                 stop = MaterialTheme.colorScheme.primaryContainer,
                 fraction = highlight.value
             )
+        ),
+        border = BorderStroke(
+            width = 2.dp,
+            color = MaterialTheme.colorScheme.primary.copy(alpha = highlight.value)
         ),
         modifier = Modifier
             .fillMaxWidth()
@@ -126,6 +130,8 @@ internal fun TrackedProductCard(
         }
     }
 }
+
+private const val HIGHLIGHT_BLINKS = 2
 
 @Preview(name = "Карточка товара", showBackground = true)
 @Composable

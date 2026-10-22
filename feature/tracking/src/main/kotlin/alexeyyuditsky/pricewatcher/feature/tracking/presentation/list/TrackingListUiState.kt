@@ -11,4 +11,6 @@ internal sealed interface TrackingListUiState : Serializable {
         highlightedProductId: String?,
         onOpenProduct: (productId: String, title: String?, url: String) -> Unit
     )
+
+    fun productPosition(productId: String): Int? = null
 }
