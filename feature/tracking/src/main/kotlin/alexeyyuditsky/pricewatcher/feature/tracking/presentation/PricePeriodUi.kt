@@ -4,6 +4,8 @@ import java.io.Serializable
 
 internal data class PricePeriodUi(
     val price: String,
+    val unitPrice: String?,
     val period: String,
-    val checks: Int
+    // The move from the previous, older period.
+    val priceChange: PriceChangeUi
 ) : Serializable

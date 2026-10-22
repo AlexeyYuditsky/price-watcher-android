@@ -1,0 +1,14 @@
+<resources>
+    <string name="services_title">Services</string>
+    <string name="services_description">Choose a service to track product prices</string>
+    <string name="service_ozon">Ozon</string>
+    <string name="service_wildberries">Wildberries</string>
+    <string name="service_yandex_market">Yandex Market</string>
+    <string name="service_available">Track prices</string>
+    <string name="service_coming_soon">Coming soon</string>
+    <string name="logout">Sign out</string>
+    <string name="logout_confirm_title">Sign out?</string>
+    <string name="logout_confirm_text">You will need to sign in again to track prices.</string>
+    <string name="logout_confirm">Sign out</string>
+    <string name="cancel">Cancel</string>
+</resources>

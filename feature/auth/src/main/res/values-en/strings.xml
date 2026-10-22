@@ -1,0 +1,22 @@
+<resources>
+    <string name="login_title">Sign in</string>
+    <string name="register_title">Sign up</string>
+    <string name="auth_description">Sign in to check product prices</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="password_hint">At least 4 characters</string>
+    <string name="login_button">Sign in</string>
+    <string name="register_button">Sign up</string>
+    <string name="switch_to_register">No account? Sign up</string>
+    <string name="switch_to_login">Already have an account? Sign in</string>
+    <string name="authorizing">Please wait…</string>
+    <string name="error_invalid_email">Enter a valid email.</string>
+    <string name="error_short_password">Password must be at least 4 characters.</string>
+    <string name="error_invalid_credentials">Wrong email or password.</string>
+    <string name="error_email_in_use">This email is already registered. Sign in to your account.</string>
+    <string name="error_too_many_requests">Too many attempts. Wait a minute and try again.</string>
+    <string name="error_server">Server error. Try again later.</string>
+    <string name="error_timeout">The server is taking too long to respond. Try again.</string>
+    <string name="error_network">Could not connect. Check your internet connection and server availability.</string>
+    <string name="error_response">Could not read the server response.</string>
+</resources>

@@ -10,5 +10,11 @@ internal data class PricePointResponse(
     @SerialName("amount")
     @Serializable(with = BigDecimalSerializer::class)
     val amount: BigDecimal? = null,
-    @SerialName("currency") val currency: String? = null
+    @SerialName("unitAmount")
+    @Serializable(with = BigDecimalSerializer::class)
+    val unitAmount: BigDecimal? = null,
+    @SerialName("currency") val currency: String? = null,
+    @SerialName("previousAmount")
+    @Serializable(with = BigDecimalSerializer::class)
+    val previousAmount: BigDecimal? = null
 )

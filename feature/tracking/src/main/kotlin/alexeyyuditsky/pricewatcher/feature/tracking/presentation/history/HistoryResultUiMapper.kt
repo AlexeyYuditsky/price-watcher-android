@@ -11,7 +11,7 @@ internal class HistoryResultUiMapper @Inject constructor(
 ) : TrackingFailureUiMapper<HistoryUiState>(::HistoryError) {
 
     override fun mapHistory(periods: List<PricePeriod>): HistoryUiState =
-        HistoryContent(periods.map(formatter::period))
+        HistoryContent(formatter.periods(periods))
 
     override fun mapProducts(products: List<TrackedProduct>): HistoryUiState = unexpected()
 

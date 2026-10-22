@@ -8,5 +8,7 @@ internal data class TrackedProductUi(
     val title: String?,
     val imageUrl: String?,
     val price: String?,
+    val priceChange: PriceChangeUi,
+    val unitPrice: String?,
     val checkedAt: String?
 ) : Serializable

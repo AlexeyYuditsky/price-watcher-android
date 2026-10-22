@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal data class HistoryResponse(
-    @SerialName("points") val points: List<PricePointResponse>? = null
+    @SerialName("periods") val periods: List<PricePeriodResponse>? = null
 )

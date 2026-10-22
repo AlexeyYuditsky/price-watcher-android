@@ -2,7 +2,9 @@ package alexeyyuditsky.pricewatcher.feature.tracking.presentation.history
 
 import alexeyyuditsky.pricewatcher.core.designsystem.theme.PricewatcherTheme
 import alexeyyuditsky.pricewatcher.feature.tracking.R
+import alexeyyuditsky.pricewatcher.feature.tracking.presentation.PriceDecreased
 import alexeyyuditsky.pricewatcher.feature.tracking.presentation.PricePeriodUi
+import alexeyyuditsky.pricewatcher.feature.tracking.presentation.PriceUnchanged
 import alexeyyuditsky.pricewatcher.feature.tracking.presentation.openInOzon
 import alexeyyuditsky.pricewatcher.feature.tracking.presentation.operation.OperationIdle
 import alexeyyuditsky.pricewatcher.feature.tracking.presentation.operation.OperationRunning
@@ -101,8 +103,8 @@ private fun HistoryScreenPreview() {
             url = "https://www.ozon.ru/product/5677075076/",
             state = HistoryContent(
                 listOf(
-                    PricePeriodUi("353,00 ₽", "20 окт., 12:00 — 20 окт., 16:30", 10),
-                    PricePeriodUi("375,00 ₽", "19 окт., 10:00 — 20 окт., 11:30", 52)
+                    PricePeriodUi("353,00 ₽", null, "20 окт., 12:00 — 20 окт., 16:30", PriceDecreased("22 ₽")),
+                    PricePeriodUi("375,00 ₽", null, "19 окт., 10:00 — 20 окт., 11:30", PriceUnchanged)
                 )
             ),
             operation = OperationIdle,

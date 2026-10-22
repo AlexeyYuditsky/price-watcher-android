@@ -1,5 +1,6 @@
 package alexeyyuditsky.pricewatcher.feature.tracking.presentation.list
 
+import alexeyyuditsky.pricewatcher.feature.tracking.presentation.operation.OperationUiState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,6 +16,7 @@ internal data object TrackingListLoading : TrackingListUiState {
     override fun show(
         scope: LazyListScope,
         actions: TrackingListActions,
+        operation: OperationUiState,
         highlightedProductId: String?,
         onOpenProduct: (productId: String, title: String?, url: String) -> Unit
     ) {

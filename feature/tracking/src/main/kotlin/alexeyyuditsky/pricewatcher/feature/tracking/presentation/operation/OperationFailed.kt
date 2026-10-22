@@ -23,6 +23,8 @@ internal data class OperationFailed(
             color = MaterialTheme.colorScheme.error
         )
     }
+
+    override fun showsError(@StringRes message: Int): Boolean = message == this.message
 }
 
 @Preview(name = "Ошибка операции", showBackground = true)

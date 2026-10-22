@@ -11,7 +11,13 @@ import android.widget.Toast
 internal fun Context.openInOzon(url: String) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).addCategory(Intent.CATEGORY_BROWSABLE)
     try {
-        startActivity(Intent(intent).setPackage(OZON_PACKAGE))
+        // A fresh Ozon task holds only this product, without the screens left from earlier Ozon use,
+        // so Back from the product returns here instead of walking through Ozon.
+        startActivity(
+            Intent(intent)
+                .setPackage(OZON_PACKAGE)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        )
     } catch (_: ActivityNotFoundException) {
         try {
             startActivity(intent)

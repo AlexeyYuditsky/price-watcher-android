@@ -7,6 +7,6 @@ data class PricePeriod(
     val from: Instant,
     val to: Instant,
     val amount: BigDecimal,
-    val currency: String,
-    val checks: Int
+    val unitAmount: BigDecimal?,
+    val currency: String
 )

@@ -2,6 +2,8 @@ package alexeyyuditsky.pricewatcher.feature.tracking.presentation.list
 
 import alexeyyuditsky.pricewatcher.core.designsystem.theme.PricewatcherTheme
 import alexeyyuditsky.pricewatcher.feature.tracking.R
+import alexeyyuditsky.pricewatcher.feature.tracking.presentation.PriceDecreased
+import alexeyyuditsky.pricewatcher.feature.tracking.presentation.PriceIncreased
 import alexeyyuditsky.pricewatcher.feature.tracking.presentation.TrackedProductUi
 import alexeyyuditsky.pricewatcher.feature.tracking.presentation.operation.OperationFailed
 import alexeyyuditsky.pricewatcher.feature.tracking.presentation.operation.OperationIdle
@@ -154,7 +156,7 @@ internal fun TrackingListScreen(
             item(key = "operation") {
                 operation.Show()
             }
-            state.show(this, actions, highlightedProductId, onOpenProduct)
+            state.show(this, actions, operation, highlightedProductId, onOpenProduct)
         }
         removal.Show(actions)
     }
@@ -176,6 +178,8 @@ private fun TrackingListScreenPreview() {
                         title = "Рюкзак городской",
                         imageUrl = null,
                         price = "353,00 ₽",
+                        priceChange = PriceDecreased("22 ₽"),
+                        unitPrice = null,
                         checkedAt = "20 окт., 16:30"
                     ),
                     TrackedProductUi(
@@ -184,6 +188,8 @@ private fun TrackingListScreenPreview() {
                         title = "Смартфон OnePlus 16",
                         imageUrl = null,
                         price = "54 990,00 ₽",
+                        priceChange = PriceIncreased("1 200 ₽"),
+                        unitPrice = null,
                         checkedAt = "20 окт., 16:00"
                     )
                 )

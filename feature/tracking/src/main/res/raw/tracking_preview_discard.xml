@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sample photo is used only by Compose Preview; keep it out of shrunk release builds. -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:discard="@drawable/preview_tracked_product" />

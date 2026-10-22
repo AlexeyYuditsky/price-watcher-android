@@ -2,6 +2,7 @@ package alexeyyuditsky.pricewatcher.feature.tracking.presentation.list
 
 import alexeyyuditsky.pricewatcher.feature.tracking.R
 import alexeyyuditsky.pricewatcher.feature.tracking.presentation.TrackedProductUi
+import alexeyyuditsky.pricewatcher.feature.tracking.presentation.operation.OperationUiState
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
@@ -15,6 +16,7 @@ internal data class TrackingListContent(
     override fun show(
         scope: LazyListScope,
         actions: TrackingListActions,
+        operation: OperationUiState,
         highlightedProductId: String?,
         onOpenProduct: (productId: String, title: String?, url: String) -> Unit
     ) {
