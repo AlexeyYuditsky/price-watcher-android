@@ -10,6 +10,7 @@ import alexeyyuditsky.pricewatcher.feature.tracking.presentation.operation.Opera
 import alexeyyuditsky.pricewatcher.feature.tracking.presentation.operation.OperationRunning
 import alexeyyuditsky.pricewatcher.feature.tracking.presentation.operation.OperationUiState
 import android.content.ClipboardManager
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,24 +25,31 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil3.annotation.ExperimentalCoilApi
+import coil3.asImage
+import coil3.compose.AsyncImagePreviewHandler
+import coil3.compose.LocalAsyncImagePreviewHandler
 
 @Composable
 internal fun TrackingListScreen(
@@ -75,8 +83,11 @@ internal fun TrackingListScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item(key = "header") {
-                TextButton(onClick = onBack, modifier = Modifier.testTag("backToServices")) {
-                    Text(text = stringResource(R.string.back_to_services))
+                IconButton(onClick = onBack, modifier = Modifier.testTag("backToServices")) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_back),
+                        contentDescription = stringResource(R.string.back_to_services)
+                    )
                 }
                 Text(
                     text = stringResource(R.string.tracking_title),
@@ -165,43 +176,56 @@ internal fun TrackingListScreen(
 // Header, input, buttons and operation items precede the products in the list.
 private const val ITEMS_BEFORE_PRODUCTS = 4
 
+@OptIn(ExperimentalCoilApi::class)
 @Preview(name = "Список отслеживания", showBackground = true)
+@Preview(
+    name = "Список отслеживания — тёмная тема",
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+)
 @Composable
 private fun TrackingListScreenPreview() {
-    PricewatcherTheme {
-        TrackingListScreen(
-            state = TrackingListContent(
-                listOf(
-                    TrackedProductUi(
-                        id = "1",
-                        url = "https://www.ozon.ru/product/5677075076/",
-                        title = "Рюкзак городской",
-                        imageUrl = null,
-                        price = "353,00 ₽",
-                        priceChange = PriceDecreased("22 ₽"),
-                        unitPrice = null,
-                        checkedAt = "20 окт., 16:30"
-                    ),
-                    TrackedProductUi(
-                        id = "2",
-                        url = "https://www.ozon.ru/product/3536803805/",
-                        title = "Смартфон OnePlus 16",
-                        imageUrl = null,
-                        price = "54 990,00 ₽",
-                        priceChange = PriceIncreased("1 200 ₽"),
-                        unitPrice = null,
-                        checkedAt = "20 окт., 16:00"
+    val context = LocalContext.current
+    // Preview has no network: Coil gets the bundled sample photo instead of loading imageUrl.
+    val previewImage = AsyncImagePreviewHandler {
+        checkNotNull(context.getDrawable(R.drawable.preview_tracked_product)).asImage()
+    }
+    CompositionLocalProvider(LocalAsyncImagePreviewHandler provides previewImage) {
+        PricewatcherTheme {
+            TrackingListScreen(
+                state = TrackingListContent(
+                    listOf(
+                        TrackedProductUi(
+                            id = "1",
+                            url = "https://www.ozon.ru/product/5677075076/",
+                            title = "Рюкзак городской",
+                            imageUrl = "https://ir.ozone.ru/s3/multimedia-preview/wc500/preview.jpg",
+                            price = "353,00 ₽",
+                            priceChange = PriceDecreased("22 ₽"),
+                            unitPrice = null,
+                            checkedAt = "20 окт., 16:30"
+                        ),
+                        TrackedProductUi(
+                            id = "2",
+                            url = "https://www.ozon.ru/product/3536803805/",
+                            title = "Смартфон OnePlus 16",
+                            imageUrl = "https://ir.ozone.ru/s3/multimedia-preview/wc500/preview.jpg",
+                            price = "54 990,00 ₽",
+                            priceChange = PriceIncreased("1 200 ₽"),
+                            unitPrice = null,
+                            checkedAt = "20 окт., 16:00"
+                        )
                     )
-                )
-            ),
-            operation = OperationIdle,
-            removal = RemovalHidden,
-            url = "",
-            highlightedProductId = null,
-            actions = TrackingListPreviewActions,
-            onBack = {},
-            onOpenProduct = { _, _, _ -> }
-        )
+                ),
+                operation = OperationIdle,
+                removal = RemovalHidden,
+                url = "",
+                highlightedProductId = null,
+                actions = TrackingListPreviewActions,
+                onBack = {},
+                onOpenProduct = { _, _, _ -> }
+            )
+        }
     }
 }
 

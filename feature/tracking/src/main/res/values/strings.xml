@@ -8,8 +8,8 @@
     <string name="adding_product">Добавляем…</string>
     <string name="tracking_empty">Пока нет отслеживаемых товаров</string>
     <string name="retry">Повторить</string>
-    <string name="back_to_services">← Сервисы</string>
-    <string name="back_to_tracking">← Мои товары</string>
+    <string name="back_to_services">Назад к сервисам</string>
+    <string name="back_to_tracking">Назад к моим товарам</string>
     <string name="remove_product">Удалить</string>
     <string name="remove_confirm_title">Удалить товар?</string>
     <string name="remove_confirm_text">«%1$s» больше не будет отслеживаться, история цен будет недоступна.</string>
@@ -23,6 +23,7 @@
     <string name="price_decreased">▼ %1$s</string>
     <string name="price_increased_description">Цена выросла на %1$s</string>
     <string name="price_decreased_description">Цена снизилась на %1$s</string>
+    <string name="price_with_change_description">%1$s. %2$s</string>
     <string name="checked_at">Проверено: %1$s</string>
     <string name="not_checked">Ещё не проверялся</string>
     <string name="history_title">История цены</string>

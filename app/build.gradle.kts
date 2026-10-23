@@ -8,11 +8,14 @@ plugins {
     alias(libs.plugins.pricewatcher.android)
 }
 
+val prodApiBaseUrl = "https://api.mypricewatcher.ru/"
+
+// The backend and apiBaseUrl properties choose the backend of debug builds only; release always uses prod.
 val backend = providers.gradleProperty("backend").getOrElse("local")
-val apiBaseUrl = providers.gradleProperty("apiBaseUrl").getOrElse(
+val debugApiBaseUrl = providers.gradleProperty("apiBaseUrl").getOrElse(
     when (backend) {
         "local" -> "http://127.0.0.1:8080/"
-        "vps" -> "https://api.mypricewatcher.ru/"
+        "vps" -> prodApiBaseUrl
         else -> error("Unknown backend '$backend'. Use local or vps.")
     }
 )
@@ -34,7 +37,6 @@ android {
         applicationId = "alexeyyuditsky.pricewatcher"
         versionCode = 1
         versionName = "1.0"
-        buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -54,12 +56,13 @@ android {
         // A separate application id lets debug and release builds be installed side by side.
         debug {
             applicationIdSuffix = ".debug"
+            buildConfigField("String", "API_BASE_URL", "\"$debugApiBaseUrl\"")
         }
         release {
+            buildConfigField("String", "API_BASE_URL", "\"$prodApiBaseUrl\"")
             signingConfig = signingConfigs.findByName("release")
             optimization {
                 enable = true
-                packageScope = setOf("androidx.**", "kotlin.**", "kotlinx.**")
             }
         }
     }

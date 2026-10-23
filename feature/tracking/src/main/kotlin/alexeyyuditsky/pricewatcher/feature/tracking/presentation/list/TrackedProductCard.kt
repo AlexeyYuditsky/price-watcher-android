@@ -3,20 +3,26 @@ package alexeyyuditsky.pricewatcher.feature.tracking.presentation.list
 import alexeyyuditsky.pricewatcher.core.designsystem.theme.PricewatcherTheme
 import alexeyyuditsky.pricewatcher.feature.tracking.R
 import alexeyyuditsky.pricewatcher.feature.tracking.presentation.PriceDecreased
+import alexeyyuditsky.pricewatcher.feature.tracking.presentation.PriceWithChange
 import alexeyyuditsky.pricewatcher.feature.tracking.presentation.TrackedProductUi
 import alexeyyuditsky.pricewatcher.feature.tracking.presentation.openInOzon
+import android.content.res.Configuration
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -29,13 +35,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.isSpecified
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -92,14 +99,22 @@ internal fun TrackedProductCard(
             ?.let { (it.width / it.height).coerceIn(MIN_PHOTO_ASPECT_RATIO, MAX_PHOTO_ASPECT_RATIO) }
             ?: OZON_PHOTO_ASPECT_RATIO
         val photoHeight = PHOTO_WIDTH / photoAspectRatio
-        Row(horizontalArrangement = Arrangement.spacedBy(PHOTO_CONTENT_GAP)) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(PHOTO_CONTENT_GAP),
+            modifier = Modifier.height(IntrinsicSize.Min)
+        ) {
+            // When the text column grows taller than the photo, the white frame stretches to the card
+            // bottom and the photo stays whole in its center, blending with the white Ozon background.
             Image(
                 painter = photo,
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .padding(start = PHOTO_PADDING, top = PHOTO_PADDING, bottom = PHOTO_PADDING)
-                    .size(width = PHOTO_WIDTH, height = photoHeight)
+                    .width(PHOTO_WIDTH)
+                    .fillMaxHeight()
+                    .clip(MaterialTheme.shapes.small)
+                    .background(colorResource(R.color.product_image_background))
             )
             // The text starts at the top of the photo and the buttons end at its bottom; with a larger
             // system font the column grows instead of clipping.
@@ -121,32 +136,16 @@ internal fun TrackedProductCard(
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        Text(
-                            text = product.price ?: stringResource(R.string.no_price),
-                            style = MaterialTheme.typography.titleMedium,
-                            color = product.priceChange.priceColor()
-                        )
-                        product.priceChange.Show(
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier.weight(1f, fill = false)
-                        )
-                    }
+                    PriceWithChange(
+                        price = product.price ?: stringResource(R.string.no_price),
+                        priceChange = product.priceChange
+                    )
                     product.unitPrice?.let { unitPrice ->
-                        Text(
-                            text = stringResource(R.string.price_per_unit, unitPrice),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                        DetailText(text = stringResource(R.string.price_per_unit, unitPrice))
                     }
-                    Text(
+                    DetailText(
                         text = product.checkedAt?.let { stringResource(R.string.checked_at, it) }
-                            ?: stringResource(R.string.not_checked),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                            ?: stringResource(R.string.not_checked)
                     )
                 }
                 // Buttons stay on one line; each label shrinks if a translation does not fit its half.
@@ -175,6 +174,20 @@ internal fun TrackedProductCard(
 }
 
 @Composable
+private fun DetailText(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        maxLines = 1,
+        autoSize = TextAutoSize.StepBased(
+            minFontSize = MIN_FONT_SIZE,
+            maxFontSize = MaterialTheme.typography.bodySmall.fontSize
+        )
+    )
+}
+
+@Composable
 private fun CardButton(
     text: String,
     onClick: () -> Unit,
@@ -189,7 +202,7 @@ private fun CardButton(
             text = text,
             maxLines = 1,
             autoSize = TextAutoSize.StepBased(
-                minFontSize = MIN_BUTTON_FONT_SIZE,
+                minFontSize = MIN_FONT_SIZE,
                 maxFontSize = MaterialTheme.typography.labelLarge.fontSize
             )
         )
@@ -202,13 +215,20 @@ private const val OZON_PHOTO_ASPECT_RATIO = 3f / 4f
 // Very tall or wide photos are fitted into a frame no taller than 1:2 and no wider than a square.
 private const val MIN_PHOTO_ASPECT_RATIO = 1f / 2f
 private const val MAX_PHOTO_ASPECT_RATIO = 1f
-private val MIN_BUTTON_FONT_SIZE = 10.sp
+// Single-line texts shrink down to this size so the whole card fits even very narrow screens.
+private val MIN_FONT_SIZE = 1.sp
 private val PHOTO_WIDTH = 120.dp
 private val PHOTO_PADDING = 12.dp
 private val PHOTO_CONTENT_GAP = 16.dp
 
 @OptIn(ExperimentalCoilApi::class)
 @Preview(name = "Карточка товара", showBackground = true, locale = "ru")
+@Preview(
+    name = "Карточка товара — тёмная тема",
+    showBackground = true,
+    locale = "ru",
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+)
 @Composable
 private fun TrackedProductCardPreview() {
     val context = LocalContext.current

@@ -8,8 +8,8 @@
     <string name="adding_product">Adding…</string>
     <string name="tracking_empty">No tracked products yet</string>
     <string name="retry">Retry</string>
-    <string name="back_to_services">← Services</string>
-    <string name="back_to_tracking">← My products</string>
+    <string name="back_to_services">Back to services</string>
+    <string name="back_to_tracking">Back to my products</string>
     <string name="remove_product">Remove</string>
     <string name="remove_confirm_title">Remove product?</string>
     <string name="remove_confirm_text">“%1$s” will no longer be tracked and its price history will be unavailable.</string>
@@ -23,6 +23,7 @@
     <string name="price_decreased">▼ %1$s</string>
     <string name="price_increased_description">Price went up by %1$s</string>
     <string name="price_decreased_description">Price went down by %1$s</string>
+    <string name="price_with_change_description">%1$s. %2$s</string>
     <string name="checked_at">Checked: %1$s</string>
     <string name="not_checked">Not checked yet</string>
     <string name="history_title">Price history</string>
