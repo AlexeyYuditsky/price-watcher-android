@@ -13,7 +13,9 @@ android {
 dependencies {
     implementation(project(":core:network"))
     api(libs.kotlinx.coroutines.core)
-    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore)
+    implementation(libs.androidx.datastore.tink)
+    implementation(libs.tink.android)
     implementation(libs.retrofit)
     implementation(libs.kotlinx.serialization.json)
 }
